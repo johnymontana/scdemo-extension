@@ -34,6 +34,12 @@ public class MyService {
         IS_IN
     }
 
+    @GET
+    @Path("/helloworld")
+    public String helloWorld() {
+        return "Hello World!";
+    }
+
     @POST
     @Path("/node")
     public Response addNode(String nodeParamsJson, @Context GraphDatabaseService db) {
