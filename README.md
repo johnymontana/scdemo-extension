@@ -1,7 +1,27 @@
-Sample Neo4j unmanaged extension
+Spatial Demo Server Extension
 ================================
 
-This is an unmanaged extension. 
+This is an unmanaged extension that extends the Neo4j API to provide endpoints that power the demo here: [http://spatialcypherdemo.herokuapp.com](spatialcypheremo.herokuapp.com).
+The additional endpoints are:
+
+`GET .../scdemo/intersects?polygon=WKTPOLYGON&category=xxx`
+Where WKTPOLYGON is a polygon string in WKT format and xxx is a business categoy (ie. Restaurants)
+
+`POST .../scdemo/node`
+Body:
+
+~~~json
+{
+    "business_id": "some_id",
+    "name": "business name",
+    "address": "address string",
+    "lat": "latitude",
+    "lon": "longitude"
+}
+~~~
+
+## Dependencies
+
 
 1. Build it: 
 
