@@ -2,7 +2,7 @@ Spatial Demo Server Extension
 ================================
 
 This is an unmanaged extension that extends the Neo4j API to provide endpoints that power the demo here: [spatialcypherdemo.herokuapp.com](http://spatialcypheremo.herokuapp.com).
-This project uses this [http://github.com](Neo4j unmanaged extension template) and some remnants of the template remain.
+This project uses this [Neo4j unmanaged extension template](https://github.com/dmontag/neo4j-unmanaged-extension-template) and some remnants of the template remain.
 The additional endpoints are:
 
 `GET .../scdemo/intersects?polygon=WKTPOLYGON&category=xxx`
