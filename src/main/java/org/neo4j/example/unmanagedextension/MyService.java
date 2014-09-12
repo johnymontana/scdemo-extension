@@ -31,28 +31,7 @@ public class MyService {
     }
 
     enum RelTypes implements RelationshipType {
-        KNOWS,
         IS_IN
-    }
-
-    @GET
-    @Path("/helloworld")
-    public String helloWorld() {
-        return "Hello World!";
-    }
-
-    @GET
-    @Path("/friendsCypher/{name}")
-    public Response getFriendsCypher(@PathParam("name") String name, @Context CypherExecutor cypherExecutor) throws IOException {
-        ExecutionEngine executionEngine = cypherExecutor.getExecutionEngine();
-        ExecutionResult result = executionEngine.execute("MATCH (p:Person)-[:KNOWS]-(friend) WHERE p.name = {n} RETURN friend.name",
-                Collections.<String, Object>singletonMap("n", name));
-        List<String> friendNames = new ArrayList<String>();
-        for (Map<String, Object> item : result) {
-            friendNames.add((String) item.get("friend.name"));
-        }
-        ObjectMapper objectMapper = new ObjectMapper();
-        return Response.ok().entity(objectMapper.writeValueAsString(friendNames)).build();
     }
 
     @POST
@@ -130,23 +109,4 @@ public class MyService {
         return Response.ok().entity(objectMapper.writeValueAsString(resultsArray)).build();
     }
 
-    @GET
-    @Path("/friendsJava/{name}")
-    public Response getFriendsJava(@PathParam("name") String name, @Context GraphDatabaseService db) throws IOException {
-
-        List<String> friendNames = new ArrayList<>();
-
-        try (Transaction tx = db.beginTx()) {
-            Node person = IteratorUtil.single(db.findNodesByLabelAndProperty(Labels.Person, "name", name));
-
-            for (Relationship knowsRel : person.getRelationships(RelTypes.KNOWS, Direction.BOTH)) {
-                Node friend = knowsRel.getOtherNode(person);
-                friendNames.add((String) friend.getProperty("name"));
-            }
-            tx.success();
-        }
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        return Response.ok().entity(objectMapper.writeValueAsString(friendNames)).build();
-    }
 }
