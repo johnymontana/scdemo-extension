@@ -46,7 +46,7 @@ public class MyService {
 
         SpatialDatabaseService spatialDB = new SpatialDatabaseService(db);
 
-        Layer businessLayer = spatialDB.getOrCreatePointLayer("scdemo", "latitude", "longitude");
+        Layer businessLayer = spatialDB.getLayer("scdemo");
         SpatialIndexReader spatialIndex = businessLayer.getIndex();
 
         SearchIntersect searchQuery = new SearchIntersect(businessLayer, wktreader.read(polygon));
@@ -57,6 +57,7 @@ public class MyService {
 
 
             for (Node business : results) {
+                System.out.println(business.getProperty("name"));
                 for (Relationship catRel : business.getRelationships(RelTypes.IS_IN, Direction.BOTH)) {
                     Node categoryNode = catRel.getOtherNode(business);
                     if (categoryNode.getProperty("name").equals(category)) {
@@ -64,7 +65,6 @@ public class MyService {
                         geojson.put("lat", business.getProperty("latitude"));
                         geojson.put("lon", business.getProperty("longitude"));
                         geojson.put("name", business.getProperty("name"));
-                        geojson.put("address", business.getProperty("address"));
                         resultsArray.add(geojson);
                     }
                 }
