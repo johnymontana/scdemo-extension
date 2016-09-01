@@ -1,19 +1,15 @@
 package org.neo4j.example.unmanagedextension;
 
-import com.google.gson.Gson;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.neo4j.cypher.javacompat.ExecutionEngine;
-import org.neo4j.cypher.javacompat.ExecutionResult;
+
 import org.neo4j.gis.spatial.Layer;
 import org.neo4j.gis.spatial.SpatialDatabaseService;
 import org.neo4j.gis.spatial.filter.SearchIntersect;
 import org.neo4j.gis.spatial.rtree.SpatialIndexReader;
 import org.neo4j.gis.spatial.rtree.filter.SearchResults;
 import org.neo4j.graphdb.*;
-import org.neo4j.helpers.collection.IteratorUtil;
-import org.neo4j.server.database.CypherExecutor;
 
 import javax.ws.rs.*;
 import javax.ws.rs.Path;
@@ -40,40 +36,6 @@ public class MyService {
         return "Hello World!";
     }
 
-    @POST
-    @Path("/node")
-    public Response addNode(String nodeParamsJson, @Context GraphDatabaseService db) {
-        Node businessNode;
-
-        SpatialDatabaseService spatialDB = new SpatialDatabaseService(db);
-
-        Gson gson = new Gson();
-        BusinessNode business = gson.fromJson(nodeParamsJson, BusinessNode.class);
-
-        try ( Transaction tx = db.beginTx()) {
-
-            businessNode = db.createNode();
-            businessNode.addLabel(Labels.Business);
-            businessNode.setProperty("business_id", business.getBusiness_id());
-            businessNode.setProperty("name", business.getName());
-            businessNode.setProperty("address", business.getAddresss());
-            businessNode.setProperty("lat", business.getLat());
-            businessNode.setProperty("lon", business.getLon());
-            tx.success();
-        }
-
-        try (Transaction tx = db.beginTx()) {
-
-            Layer businessLayer = spatialDB.getOrCreatePointLayer("business", "lat", "lon");
-
-            businessLayer.add(businessNode);
-            tx.success();
-        }
-
-
-        return Response.ok().build();
-
-    }
 
     @GET
     @Path("/intersects/")
