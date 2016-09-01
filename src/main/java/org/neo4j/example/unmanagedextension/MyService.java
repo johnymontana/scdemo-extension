@@ -45,7 +45,8 @@ public class MyService {
         ArrayList<Object> resultsArray = new ArrayList();
 
         SpatialDatabaseService spatialDB = new SpatialDatabaseService(db);
-        Layer businessLayer = spatialDB.getOrCreatePointLayer("business", "lat", "lon");
+
+        Layer businessLayer = spatialDB.getOrCreatePointLayer("scdemo", "latitude", "longitude");
         SpatialIndexReader spatialIndex = businessLayer.getIndex();
 
         SearchIntersect searchQuery = new SearchIntersect(businessLayer, wktreader.read(polygon));
@@ -60,8 +61,8 @@ public class MyService {
                     Node categoryNode = catRel.getOtherNode(business);
                     if (categoryNode.getProperty("name").equals(category)) {
                         HashMap<String, Object> geojson = new HashMap<>();
-                        geojson.put("lat", business.getProperty("lat"));
-                        geojson.put("lon", business.getProperty("lon"));
+                        geojson.put("lat", business.getProperty("latitude"));
+                        geojson.put("lon", business.getProperty("longitude"));
                         geojson.put("name", business.getProperty("name"));
                         geojson.put("address", business.getProperty("address"));
                         resultsArray.add(geojson);
